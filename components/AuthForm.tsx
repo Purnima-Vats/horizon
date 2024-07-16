@@ -38,18 +38,20 @@ const AuthForm = ({ type }: { type: string }) => {
             // sign-up with Appwrite and create a plaid token
 
             if(type === "sign-up"){
-                // const newUser = await signUp(data);
+                const newUser = await signUp(data);
 
-                // setUser(newUser)
+                setUser(newUser)
             } 
 
             if(type === "sign-in"){
-                // const response = await signIn({
-                //     email: data.email,
-                //     password: data.password
-                // })
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password
+                })
 
-                // if(response) router.push("/")
+                console.log("response", response)
+
+                if(response) router.push("/")
             }
 
         } catch (error) {
@@ -125,13 +127,13 @@ const AuthForm = ({ type }: { type: string }) => {
                                         control={form.control}
                                         name="address1"
                                         label="Address"
-                                        placeholder="Enter your specific address"
+                                        placeholder="14th street suite 101"
                                     />
                                     <CustomInput
                                         control={form.control}
                                         name="city"
                                         label="City"
-                                        placeholder="Enter your city"
+                                        placeholder="Queens"
                                     />
 
                                     <div className="flex gap-4">
@@ -145,7 +147,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             control={form.control}
                                             name="postalCode"
                                             label="Postal Code"
-                                            placeholder="Example: 11101"
+                                            placeholder="11380"
                                         />
                                     </div>
 
