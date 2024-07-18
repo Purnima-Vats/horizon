@@ -2,7 +2,7 @@
 
 import { plaidClient } from "@/lib/plaid"
 import { cookies } from "next/headers"
-import { ID } from "node-appwrite"
+import { Account, Client, ID, Models, Query } from "node-appwrite"
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid"
 import { createAdminClient, createSessionClient } from "../appwrite"
 import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils"
@@ -15,17 +15,52 @@ const {
     APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID,
 } = process.env;
 
+export const getUserInfo = async ({ userId }: getUserInfoProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        const user = await database.listDocuments(
+            DATABASE_ID!,
+            USER_COLLECTION_ID!,
+            [
+                Query.equal("userId", [userId]),
+            ]
+        );
+
+        return parseStringify(user.documents[0]);
+    } catch (error) {
+        console.log("Error in getUserInfo:", error);
+    }
+};
+
 export const signIn = async ({ email, password }: signInProps) => {
     try {
         const { account } = await createSessionClient();
+        const session = await account.createEmailPasswordSession(email, password);
 
-        const response = await account.createEmailPasswordSession(email, password)
+        console.log("Session created:", session);
 
-        return parseStringify(response)
+        cookies().set("appwrite-session", session.secret, {
+            path: "/",
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
+
+        // Log the cookie value after setting it
+        const storedCookie = cookies().get("appwrite-session");
+        console.log("Stored Cookie:", storedCookie);
+
+        const user: Models.Document = await getUserInfo({ userId: session.userId });
+
+        return parseStringify(user);
     } catch (error) {
-        console.log("Error", error)
+        console.log("Error in signIn:", error);
     }
-}
+
+};
+
+
 
 export const signUp = async ({password, ...userData}: SignUpParams) => {
 
@@ -85,11 +120,12 @@ export const signUp = async ({password, ...userData}: SignUpParams) => {
 export async function getLoggedInUser() {
     try {
         const { account } = await createSessionClient();
-        // const user = await account.get();
+        const result = await account.get();
 
-        // return parseStringify(user)
+        const user = await getUserInfo({ userId: result.$id })
 
-        return await account.get()
+        return parseStringify(user)
+
     } catch (error) {
         console.log("error", error);
     }
@@ -222,3 +258,63 @@ export const exchangePublicToken = async ({
         console.error("An error occurred while creating exchanging token:", error);
     }
 };
+
+export const getBanks = async ({userId}: getBanksProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        const banks = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [
+                Query.equal("userId", [userId]),
+            ]
+        )
+
+        return parseStringify(banks.documents)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getBank = async ({documentId}: getBankProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        const bank = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [
+                Query.equal("$id", [documentId]),
+            ]
+        )
+
+        return parseStringify(bank.documents[0])
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+// const client = new Client()
+// .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+// .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!); 
+
+// const account = new Account(client);
+
+// const session = await account.createEmailPasswordSession(
+// email, 
+// password
+// );
+
+// cookies().set("appwrite-session", session.secret, {
+// path: "/",
+// httpOnly: true,
+// sameSite: "strict",
+// secure: true,
+// });
+
+// const user = await account.get();
+
+// return parseStringify(user)

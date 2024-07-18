@@ -10,7 +10,11 @@ export async function createSessionClient() {
 
     const session = cookies().get("appwrite-session");
 
+    // Log the cookie value during retrieval
+    // console.log("Retrieved Cookie:", session);
+
     if (!session || !session.value) {
+        console.log("No session found in cookies");
         throw new Error("No session");
     }
 
@@ -41,3 +45,5 @@ export async function createAdminClient() {
         },
     };
 }
+
+

@@ -67,6 +67,14 @@ const AuthForm = ({ type }: { type: string }) => {
                 console.log("response", response)
 
                 if(response) router.push("/")
+                else console.log("error")
+
+                // const userData = await signIn({
+                //     email: data.email,
+                //     password: data.password
+                // })
+
+                // setUser(userData)
             }
 
         } catch (error) {
