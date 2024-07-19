@@ -12,24 +12,24 @@ export default async function RootLayout({
     const defaultUser = {name: "Guest", email: ""};
     const loggedIn = await getLoggedInUser();
 
-    // if (!loggedIn) {
-    //     return (
-    //         <main className="flex h-screen w-full font-inter">
-    //             <div className="root-layout">
-    //                 <Image 
-    //                     src="/icons/logo.svg"
-    //                     width={30}
-    //                     height={30}
-    //                     alt="logo"
-    //                 />
-    //                 <div>
-    //                     <MobileNav user={defaultUser}/>
-    //                 </div>
-    //             </div>
-    //             {children}
-    //         </main>
-    //     );
-    // }
+    if (!loggedIn) {
+        return (
+            <main className="flex h-screen w-full font-inter">
+                <div className="root-layout">
+                    <Image 
+                        src="/icons/logo.svg"
+                        width={30}
+                        height={30}
+                        alt="logo"
+                    />
+                    <div>
+                        <MobileNav user={defaultUser}/>
+                    </div>
+                </div>
+                {children}
+            </main>
+        );
+    }
 
     if(!loggedIn) redirect("/sign-in")
 

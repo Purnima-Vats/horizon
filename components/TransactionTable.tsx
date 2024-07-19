@@ -34,7 +34,7 @@ const CategoryBadge = ({ category }: CategoryBadgeProps) => {
 
 const TransactionsTable = ({ transactions }: TransactionTableProps) => {
     return (
-        <div className="overflow-x-auto">
+        <div className="max-w-full overflow-x-auto">
             <Table>
             <TableHeader className="bg-[#f9fafb]">
                 <TableRow>
@@ -76,7 +76,7 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
                             </TableCell>
 
                             <TableCell
-                                className={`pl-2 pr-10 font-semibold ${
+                                className={`pl-2 pr-5 font-semibold ${
                                     isDebit || amount[0] === "-"
                                         ? "text-[#f04438]"
                                         : "text-[#039855]"
@@ -89,19 +89,19 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
                                     : amount}
                             </TableCell>
 
-                            <TableCell className="pl-2 pr-10">
+                            <TableCell className="pl-2 pr-5">
                                 <CategoryBadge category={status} />
                             </TableCell>
 
-                            <TableCell className="min-w-32 pl-2 pr-10">
+                            <TableCell className="min-w-32 pl-2 pr-5">
                                 {formatDateTime(new Date(t.date)).dateTime}
                             </TableCell>
 
-                            <TableCell className="pl-2 pr-10 capitalize min-w-24">
+                            <TableCell className="pl-2 pr-5 capitalize min-w-24 max-md:hidden">
                                 {t.paymentChannel}
                             </TableCell>
 
-                            <TableCell className="pl-2 pr-10 max-md:hidden">
+                            <TableCell className="pl-2 pr-5 max-md:hidden">
                                 <CategoryBadge category={t.category} />
                             </TableCell>
                         </TableRow>
