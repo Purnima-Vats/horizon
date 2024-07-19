@@ -26,7 +26,7 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
 
         return parseStringify(newTransaction);
     } catch (error) {
-        console.log(error);
+        console.log("Error in creating new transaction:", error);
     }
 }
 

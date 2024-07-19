@@ -35,10 +35,10 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 
 export const signIn = async ({ email, password }: signInProps) => {
     try {
-        const { account } = await createSessionClient();
+        const { account } = await createAdminClient();
         const session = await account.createEmailPasswordSession(email, password);
 
-        console.log("Session created:", session);
+        // console.log("Session created:", session);
 
         cookies().set("appwrite-session", session.secret, {
             path: "/",
@@ -49,7 +49,7 @@ export const signIn = async ({ email, password }: signInProps) => {
 
         // Log the cookie value after setting it
         const storedCookie = cookies().get("appwrite-session");
-        console.log("Stored Cookie:", storedCookie);
+        // console.log("Stored Cookie:", storedCookie);
 
         const user: Models.Document = await getUserInfo({ userId: session.userId });
 
@@ -295,26 +295,23 @@ export const getBank = async ({documentId}: getBankProps) => {
     }
 }
 
+export const getBankByAccountId = async ({accountId}: getBankByAccountIdProps) => {
+    try {
+        const { database } = await createAdminClient();
 
+        const bank = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [
+                Query.equal("accountId", [accountId]),
+            ]
+        )
 
-// const client = new Client()
-// .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-// .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!); 
+        if(bank.total !== 1) return null;
 
-// const account = new Account(client);
+        return parseStringify(bank.documents[0])
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-// const session = await account.createEmailPasswordSession(
-// email, 
-// password
-// );
-
-// cookies().set("appwrite-session", session.secret, {
-// path: "/",
-// httpOnly: true,
-// sameSite: "strict",
-// secure: true,
-// });
-
-// const user = await account.get();
-
-// return parseStringify(user)
