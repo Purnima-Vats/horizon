@@ -9,8 +9,8 @@ import React from "react";
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
     const currentPage = Number(page as string) || 1;    
     const loggedIn = await getLoggedInUser();
-    // if(!loggedIn) return <div>Please login to access home page</div>
-    const accounts = await getAccounts({userId: loggedIn.$id!});
+    if(!loggedIn) return <div>Please login to access home page</div>
+    const accounts = await getAccounts({userId: loggedIn?.$id!});
     if(!accounts) return ;
     const accountsData = accounts?.data;
     const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;

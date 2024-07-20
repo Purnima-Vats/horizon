@@ -6,8 +6,8 @@ import React from "react";
 
 const Transfer = async () => {
     const loggedIn = await getLoggedInUser();
-    // if(!loggedIn) return <div>Please login to access home page</div>
-    const accounts = await getAccounts({userId: loggedIn.$id!});
+    if(!loggedIn) return <div>Please login to access payment-transfer page</div>
+    const accounts = await getAccounts({userId: loggedIn?.$id!});
     if(!accounts) return ;
     const accountsData = accounts?.data;
     return (

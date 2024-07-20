@@ -96,7 +96,7 @@ export const signUp = async ({password, ...userData}: SignUpParams) => {
             ID.unique(),
             {
                 ...userData,
-                userId: newUserAccount.$id,
+                userId: newUserAccount?.$id,
                 dwollaCustomerId,
                 dwollaCustomerUrl
             }
@@ -122,7 +122,7 @@ export async function getLoggedInUser() {
         const { account } = await createSessionClient();
         const result = await account.get();
 
-        const user = await getUserInfo({ userId: result.$id })
+        const user = await getUserInfo({ userId: result?.$id })
 
         return parseStringify(user)
 
@@ -147,7 +147,7 @@ export const createLinkToken = async (user: User) => {
     try {
         const tokenParams = {
             user: {
-                client_user_id: user.$id as string,
+                client_user_id: user?.$id as string,
             },
             client_name: `${user.firstName} ${user.lastName}`,
             products: ["auth"] as Products[],
@@ -238,7 +238,7 @@ export const exchangePublicToken = async ({
 
         // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and sharable ID
         await createBankAccount({
-            userId: user.$id as string,
+            userId: user?.$id as string,
             bankId: itemId,
             accountId: accountData.account_id,
             accessToken,

@@ -44,7 +44,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
                     mask: accountData.mask!,
                     type: accountData.type as string,
                     subtype: accountData.subtype! as string,
-                    appwriteItemId: bank.$id,
+                    appwriteItemId: bank?.$id,
                     sharableId: bank.sharableId,
                 };
 
@@ -77,18 +77,18 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
 
         // get transfer transactions from appwrite
         const transferTransactionsData = await getTransactionsByBankId({
-            bankId: bank.$id,
+            bankId: bank?.$id,
         });
 
         const transferTransactions = transferTransactionsData.documents.map(
             (transferData: Transaction) => ({
-                id: transferData.$id,
+                id: transferData?.$id,
                 name: transferData.name!,
                 amount: transferData.amount!,
                 date: transferData.$createdAt,
                 paymentChannel: transferData.channel,
                 category: transferData.category,
-                type: transferData.senderBankId === bank.$id ? "debit" : "credit",
+                type: transferData.senderBankId === bank?.$id ? "debit" : "credit",
             })
         );
 
@@ -111,7 +111,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
             mask: accountData.mask!,
             type: accountData.type as string,
             subtype: accountData.subtype! as string,
-            appwriteItemId: bank.$id,
+            appwriteItemId: bank?.$id,
         };
 
         // sort transactions by date such that the most recent transaction is first

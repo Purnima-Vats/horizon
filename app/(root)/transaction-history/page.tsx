@@ -12,7 +12,7 @@ const TransactionHistory = async ({
     const currentPage = Number(page as string) || 1;
     const loggedIn = await getLoggedInUser();
     const accounts = await getAccounts({
-        userId: loggedIn.$id,
+        userId: loggedIn?.$id,
     });
 
     if (!accounts) return;

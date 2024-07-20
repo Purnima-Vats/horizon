@@ -6,8 +6,8 @@ import React from 'react'
 
 const MyBanks = async () => {
     const loggedIn = await getLoggedInUser();
-    // if(!loggedIn) return <div>Please login to access home page</div>
-    const accounts = await getAccounts({userId: loggedIn.$id!});
+    if(!loggedIn) return <div>Please login to access my-vanks page</div>
+    const accounts = await getAccounts({userId: loggedIn?.$id!});
 
 
     return (

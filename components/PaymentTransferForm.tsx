@@ -72,10 +72,10 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
                 const transaction = {
                     name: data.name,
                     amount: data.amount,
-                    senderId: senderBank.userId.$id,
-                    senderBankId: senderBank.$id,
-                    receiverId: receiverBank.userId.$id,
-                    receiverBankId: receiverBank.$id,
+                    senderId: senderBank.userId?.$id,
+                    senderBankId: senderBank?.$id,
+                    receiverId: receiverBank.userId?.$id,
+                    receiverBankId: receiverBank?.$id,
                     email: data.email,
                 };
 
