@@ -4,12 +4,15 @@ import RightSidebar from "@/components/RightSidebar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
 import { getAccount, getAccounts } from "@/lib/actions/bank.actions";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
+    
     const currentPage = Number(page as string) || 1;    
     const loggedIn = await getLoggedInUser();
-    if(!loggedIn) return <div>Please login to access home page</div>
+    // if(!loggedIn) return <div>Please login to access home page</div>
+    if(!loggedIn) redirect("/sign-in")
     const accounts = await getAccounts({userId: loggedIn?.$id!});
     if(!accounts) return ;
     const accountsData = accounts?.data;
