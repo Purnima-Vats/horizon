@@ -1,3 +1,12 @@
+You have to put real USA city data like Queens, NY and pincode like 11380 to make valid account and then you can check out the app. 
+
+
+
+
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
